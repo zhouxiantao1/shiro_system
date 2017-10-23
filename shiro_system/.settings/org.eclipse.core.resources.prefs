@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/example/polly/service/UserService.java=UTF-8
+encoding//src/main/java/com/example/polly/service/impl/UserServiceImpl.java=UTF-8
+encoding//src/main/java/com/example/polly/sys/bind/CurrentUser.java=UTF-8
+encoding//src/main/java/com/example/polly/sys/shiro/UserRealm.java=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/index.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/login.jsp=UTF-8

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.polly.dao.RoleDao">
+    
+	<sql id="columns">
+		id,
+		role,
+		description,
+		available
+	</sql>
+	
+	<!-- 查询用户列表-->
+	<select id="findList" resultType="com.example.polly.enty.Role">
+		SELECT
+			<include refid="columns"/>
+		FROM sys_role
+		<where>
+			<if test="role != null and role !='' ">role like '%' || #{role} || '%'</if>
+		</where>
+	</select>
+    
+	<!-- 添加角色-权限之间关系 -->
+	<insert id="correlationPermissions">
+		INSERT INTO sys_role_permission(
+			id, 
+			roleId, 
+			permissionId
+		) VALUES (
+			#{id},
+			#{roleId},
+			#{permissionId}
+		)
+	</insert>
+	
+	<!-- 移除角色-权限之间关系 -->
+	<delete id="uncorrelationPermissions">
+     delete from sys_role_permission
+     <where>
+          roleId = #{roleId} and permissionId = #{permissionId}
+      </where>
+   </delete>
+	
+	<insert id="createRole">
+		INSERT INTO sys_role(
+			id, 
+			role, 
+			description,
+			available
+		) VALUES (
+			#{id},
+			#{role},
+			#{description},
+			#{available}
+		)
+	</insert>
+   
+   <delete id="deleteRole">
+     delete from sys_role
+     <where>
+          id = #{id}
+       </where>
+   </delete>
+	
+</mapper>
