@@ -6,7 +6,14 @@
 		id,
 		username,
 		password,
-		salt
+		salt,
+		real_name as realName,
+		phone,
+		email,
+		create_time as createTime,
+		update_time as updateTime,
+		login_time as loginTime,
+		available
 	</sql>
 	
 	<!-- 根据id查询 -->
@@ -72,12 +79,26 @@
 			id, 
 			username, 
 			password,
-			salt
+			salt,
+			real_name,
+			phone,
+			email,
+			create_time,
+			update_time,
+			login_time,
+			available
 		) VALUES (
 			#{id},
 			#{username},
 			#{password},
-			#{salt}
+			#{salt},
+			#{realName},
+			#{phone},
+			#{email},
+			#{createTime},
+			#{updateTime},
+			#{loginTime},
+			#{available}
 		)
 	</insert>
 	
@@ -87,6 +108,13 @@
            <if test="username != null and username !='' ">username = #{username},</if>
            <if test="password != null and password !='' ">password = #{password},</if>
            <if test="salt != null and salt !='' ">salt = #{salt},</if>
+           <if test="realName != null and realName !='' ">real_name = #{realName},</if>
+           <if test="phone != null and phone !='' ">phone = #{phone},</if>
+           <if test="email != null and email !='' ">email = #{email},</if>
+           <if test="createTime != null and createTime !='' ">create_time = #{createTime},</if>
+           <if test="updateTime != null and updateTime !='' ">update_time = #{updateTime},</if>
+           <if test="loginTime != null and loginTime !='' ">login_time = #{loginTime},</if>
+           <if test="available != null and available !='' ">available = #{available},</if>
         </set>
         <where>
           id = #{id}

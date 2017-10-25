@@ -1,6 +1,7 @@
 package com.example.polly.enty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>User: Zhang Kaitao
@@ -12,6 +13,13 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String salt;
+    private String realName;
+    private String phone;
+    private String email;
+    private Date createTime;
+    private Date updateTime;
+    private Date loginTime;
+    private String available;//0-Ê¹ÓÃ£¬1-½ûÖ¹
 
     private Boolean locked = Boolean.FALSE; //trueËø¶¨ÕËºÅ
 
@@ -66,8 +74,64 @@ public class User implements Serializable {
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
+    
+    public String getRealName() {
+		return realName;
+	}
 
-    @Override
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public String getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(String available) {
+		this.available = available;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

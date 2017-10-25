@@ -6,8 +6,18 @@
 		id,
 		permission,
 		description,
-		available
+		available,
+		parent_id as parentId,
+		parent_ids as parentIds
 	</sql>
+	
+	<!-- 根据parentId查询-->
+	<select id="getByParentId" resultType="com.example.polly.enty.Permission">
+		SELECT
+			<include refid="columns"/>
+		FROM sys_permission where id =#{parentId}
+	</select>
+	
 	
 	<!-- 查询权限列表-->
 	<select id="findList" resultType="com.example.polly.enty.Permission">
@@ -24,12 +34,16 @@
 			id,
 			permission,
 			description,
-			available
+			available,
+			parent_id,
+			parent_ids
 		) VALUES (
 			#{id},
 			#{permission},
 			#{description},
-			#{available}
+			#{available},
+			#{parentId},
+			#{parentIds}
 		)
 	</insert>
    

@@ -15,8 +15,10 @@ public interface PermissionDao {
 	
 	public List<Permission> findList(Permission permission);
 
-    public Permission createPermission(Permission permission);
+    public void createPermission(Permission permission);
 
     public void deletePermission(Long permissionId);
+    
+    public Permission getByParentId(Long parentId);
 
 }

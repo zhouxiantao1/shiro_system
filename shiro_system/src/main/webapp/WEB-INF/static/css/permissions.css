@@ -1,0 +1,18 @@
+.th_width_first{
+	width:30%;
+}
+.th_width_second{
+	width:30%;
+}
+.th_width_last{
+	width:20%;
+}
+
+.user_list i.fa {
+    width: 10%;
+    margin-left: 15px;
+}
+
+.color_white{
+	color:#fafafa;
+}

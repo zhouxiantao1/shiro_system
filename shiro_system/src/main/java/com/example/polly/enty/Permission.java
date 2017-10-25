@@ -11,11 +11,14 @@ public class Permission implements Serializable {
     private Long id;
     private String permission; //权限标识 程序中判断使用,如"user:create"
     private String description; //权限描述,UI界面显示使用
-    private Long available; //是否可用,如果不可用将不会添加给用户
+    private String available; //是否可用,如果不可用将不会添加给用户
+    private Long parentId;
+    private String parentIds;//父类id集合，形式为1-2-3
+    private String parentIdsAndId; //父类结合再加上本身的id，用于tree展示
     public Permission() {
     }
 
-    public Permission(String permission, String description, Long available) {
+    public Permission(String permission, String description, String available) {
         this.permission = permission;
         this.description = description;
         this.available = available;
@@ -45,15 +48,40 @@ public class Permission implements Serializable {
         this.description = description;
     }
 
-    public Long getAvailable() {
+    public String getAvailable() {
         return available;
     }
 
-    public void setAvailable(Long available) {
+    public void setAvailable(String available) {
         this.available = available;
     }
+    
 
-    @Override
+    public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}	
+
+	public String getParentIds() {
+		return parentIds;
+	}
+
+	public void setParentIds(String parentIds) {
+		this.parentIds = parentIds;
+	}
+	
+	public String getParentIdsAndId() {
+		return parentIdsAndId;
+	}
+
+	public void setParentIdsAndId(String parentIdsAndId) {
+		this.parentIdsAndId = parentIdsAndId;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

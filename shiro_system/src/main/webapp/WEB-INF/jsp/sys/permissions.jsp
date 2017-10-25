@@ -9,7 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-
+<link href="${pageContext.request.contextPath}/static/treeTable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/static/treeTable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/static/lib/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css"
@@ -20,13 +21,15 @@
 	href="${pageContext.request.contextPath}/static/stylesheets/premium.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/static/css/user.css">
+<link href="${pageContext.request.contextPath}/static/treeTable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/static/treeTable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/static/css/permissions.css" rel="stylesheet" type="text/css" />
 
-<script
-	src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js"
-	type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/static/treeTable/jquery.treetable.js" type="text/javascript"></script>
 
 </head>
-<body class=" theme-blue">
+<body class="theme-blue">
 
 	<!-- Demo page code -->
 
@@ -42,20 +45,24 @@
             }
 
             $('[data-popover="true"]').popover({html: true});
-            
+                         
         });
+        
+        $(document).ready(function() {
+        	$("#treeTable").treetable({ expandable: true });
+		});
     </script>
-	<style type="text/css">
-#line-chart {
-	height: 300px;
-	width: 800px;
-	margin: 0px auto;
-	margin-top: 1em;
-}
-
-.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
-	color: #fff;
-}
+<style type="text/css">
+	#line-chart {
+		height: 300px;
+		width: 800px;
+		margin: 0px auto;
+		margin-top: 1em;
+	}
+	
+	.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+		color: #fff;
+	}
 </style>
 
 	<script type="text/javascript">
@@ -192,7 +199,7 @@
 		<div class="header">
 			<h1 class="page-title">权限管理</h1>
 			<ul class="breadcrumb">
-				<li><a href="/">主页</a></li>
+				<li><a href="${pageContext.request.contextPath}/">主页</a></li>
 				<li class="active">权限列表</li>
 			</ul>
 		</div>
@@ -200,52 +207,43 @@
 
 			<div class="btn-toolbar list-toolbar">
 				<button class="btn btn-primary">
-					<i class="fa fa-plus"></i> 新增
+					<a class="color_white" href="${pageContext.request.contextPath}/permission/get?status=1"><i class="fa fa-plus"></i> 新增</a>
 				</button>
 				<button class="btn btn-default">Import</button>
 				<button class="btn btn-default">Export</button>
 				<div class="btn-group"></div>
 			</div>
-			<table class="table">
+			<table class="table" id="treeTable">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>权限介绍</th>
-						<th>权限标识</th>
-						<th>是否可用</th>
-						<th style="width: 10em;"></th>
+						<th class="th_width_first">权限介绍</th>
+						<th class="th_width_second">权限标识</th>
+						<th class="th_width_last">是否可用</th>
+						<th class="th_width_last"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${permissions}" var="permission" varStatus="status">
-						<tr>
-							<td>${status.index+1}</td>
+					<c:forEach items="${permissionList}" var="permission" varStatus="status">
+						<tr data-tt-id='${permission.parentIdsAndId}' data-tt-parent-id='${permission.parentIds}'>
 							<td>${permission.description}</td>
 							<td>${permission.permission}</td>
-							<td><if ${permission.available}==1>
+							<td>
 							<c:choose>
-		                         <c:when test="${permission.available=='1'}"><font style="color: green;">使用</font></c:when>
+		                         <c:when test="${permission.available=='0'}"><font style="color: green;">使用</font></c:when>
 		                         <c:otherwise><font style="color: red;">禁用</font></c:otherwise>
-		                   </c:choose>
+		                    </c:choose>
                    			</td>
-							<td class="user_list"><a href="user.html"><i
-									class="fa fa-pencil"></i></a> <a href="#myModal" role="button"
-								data-toggle="modal"><i class="fa fa-trash-o"></i></a></td>
+							<td class="user_list">
+								<a href="user.html"><i class="fa fa-pencil"></i></a>
+								<a href="#myModal" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+								<a href="${pageContext.request.contextPath}/permission/get?parentId=${permission.id}&status=1" role="button" data-toggle="modal">添加下级</i></a>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 
-			<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">&raquo;</a></li>
-			</ul>
-
+			<!-- 弹出框 -->
 			<div class="modal small fade" id="myModal" tabindex="-1"
 				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">

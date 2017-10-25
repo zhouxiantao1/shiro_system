@@ -20,6 +20,7 @@
 	href="${pageContext.request.contextPath}/static/stylesheets/premium.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/static/css/user.css">
+<link href="${pageContext.request.contextPath}/static/common/table.css" rel="stylesheet" type="text/css" />
 
 <script
 	src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js"
@@ -116,7 +117,7 @@
 							class="fa fa-caret-right"></span> 用户管理</a></li>
 					<li><a href="${pageContext.request.contextPath}/role/list"><span
 							class="fa fa-caret-right"></span> 角色管理</a></li>
-					<li><a href="media.html"><span class="fa fa-caret-right"></span>
+					<li><a href="${pageContext.request.contextPath}/permission/list"><span class="fa fa-caret-right"></span>
 							权限管理</a></li>
 				</ul></li>
 
@@ -209,10 +210,10 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Username</th>
+						<th class="row_line">#</th>
+						<th class="row_line">角色名称</th>
+						<th class="row_line">角色描述</th>
+						<th class="row_line">是否可用</th>
 						<th style="width: 10em;"></th>
 					</tr>
 				</thead>
@@ -220,12 +221,14 @@
 					<c:forEach items="${roles}" var="role" varStatus="status">
 						<tr>
 							<td>${status.index+1}</td>
-							<td>Mark</td>
-							<td>Tompson</td>
 							<td>${role.role}</td>
-							<td class="user_list"><a href="user.html"><i
-									class="fa fa-pencil"></i></a> <a href="#myModal" role="button"
-								data-toggle="modal"><i class="fa fa-trash-o"></i></a></td>
+							<td>${role.description}</td>
+							<td><c:choose>
+		                         <c:when test="${role.available=='0'}"><font style="color: green;">使用</font></c:when>
+		                         <c:otherwise><font style="color: red;">禁用</font></c:otherwise>
+		                   </c:choose></td>
+							<td class="user_list"><a href="${pageContext.request.contextPath}/role/get"><i class="fa fa-pencil"></i></a> 
+							<a href="#myModal" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a></td>
 						</tr>
 					</c:forEach>
 				</tbody>

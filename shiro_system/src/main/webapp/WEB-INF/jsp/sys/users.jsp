@@ -18,12 +18,10 @@
 	href="${pageContext.request.contextPath}/static/stylesheets/theme.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/static/stylesheets/premium.css">
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/static/css/user.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/user.css">
+<link href="${pageContext.request.contextPath}/static/common/table.css" rel="stylesheet" type="text/css" />
 
-<script
-	src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js"
-	type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 
 
 
@@ -206,19 +204,21 @@
 
 			<div class="btn-toolbar list-toolbar">
 				<button class="btn btn-primary">
-					<i class="fa fa-plus"></i> New User
+					<i class="fa fa-plus"></i> 新增
 				</button>
-				<button class="btn btn-default">Import</button>
-				<button class="btn btn-default">Export</button>
+				<button class="btn btn-default">导入</button>
+				<button class="btn btn-default">导出</button>
 				<div class="btn-group"></div>
 			</div>
 			<table class="table">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Username</th>
+						<th class="row_line">#</th>
+						<th class="row_line">姓名</th>
+						<th class="row_line">电话</th>
+						<th class="row_line">邮箱</th>
+						<th class="row_line">登录名</th>
+						<th class="row_line">是否可用</th>
 						<th style="width: 10em;"></th>
 					</tr>
 				</thead>
@@ -226,9 +226,14 @@
 					<c:forEach items="${userList}" var="user" varStatus="status">
 						<tr>
 							<td>${status.index+1}</td>
-							<td>Mark</td>
-							<td>Tompson</td>
+							<td>${user.realName}</td>
+							<td>${user.phone}</td>
+							<td>${user.email}</td>
 							<td>${user.username}</td>
+							<td><c:choose>
+		                         <c:when test="${user.available=='0'}"><font style="color: green;">使用</font></c:when>
+		                         <c:otherwise><font style="color: red;">禁用</font></c:otherwise>
+		                   </c:choose></td>
 							<td class="user_list"><a href="user.html"><i
 									class="fa fa-pencil"></i></a> <a href="#myModal" role="button"
 								data-toggle="modal"><i class="fa fa-trash-o"></i></a></td>

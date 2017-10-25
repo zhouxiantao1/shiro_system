@@ -23,8 +23,8 @@ public class PermissionServiceImpl implements PermissionService {
         this.permissionDao = permissionDao;
     }
 
-    public Permission createPermission(Permission permission) {
-        return permissionDao.createPermission(permission);
+    public void createPermission(Permission permission) {
+         permissionDao.createPermission(permission);
     }
 
     public void deletePermission(Long permissionId) {
@@ -36,5 +36,12 @@ public class PermissionServiceImpl implements PermissionService {
      * */
     public List<Permission> findList(Permission permission){
     	return permissionDao.findList(permission);
+    }
+    
+    /**
+     * 根据父类查询
+     * */
+    public Permission getByParentId(Long parentId){
+    	return permissionDao.getByParentId(parentId);
     }
 }
