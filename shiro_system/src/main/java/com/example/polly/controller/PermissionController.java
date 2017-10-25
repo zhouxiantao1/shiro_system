@@ -51,7 +51,7 @@ public class PermissionController {
 		return "sys/permissions";
 	}
 	
-//	@RequiresPermissions("sys:permission:add")
+	@RequiresPermissions("sys:permission:add")
 	@RequestMapping("/add")
 	public String addPermission(HttpServletRequest request,HttpServletResponse response,String status,Permission permission, Model model){
 		if("1".equals(status)){//ÐÂÔö		
@@ -74,6 +74,7 @@ public class PermissionController {
 		return null;
 	}
 	
+	@RequiresPermissions("sys:permission:get")
 	@RequestMapping("/get")
 	public String getPermission(HttpServletRequest request,HttpServletResponse response,String status,Permission permission, Model model){
 		model.addAttribute("permission", permission);

@@ -13,22 +13,37 @@
 	<select id="findList" resultType="com.example.polly.enty.Role">
 		SELECT
 			<include refid="columns"/>
-		FROM sys_role
-		<where>
-			<if test="role != null and role !='' ">role like '%' || #{role} || '%'</if>
-		</where>
+		FROM sys_role where available='0'
 	</select>
+	
+	<!-- 角色ID查询权限列表-->
+	<select id="findPermissionListByRoleId" resultType="long" >
+		SELECT permissionId FROM sys_role_permission where roleId = #{roleId} and available='0'
+	</select>
+	
+	<!-- 根据roleId更新 -->
+	<update id="updateRolePermissionByRoleId">
+        update sys_role_permission
+        <set>
+           available = '1',
+        </set>
+        <where>
+           roleId = #{roleId}
+        </where>
+   </update>
     
 	<!-- 添加角色-权限之间关系 -->
 	<insert id="correlationPermissions">
 		INSERT INTO sys_role_permission(
-			id, 
 			roleId, 
-			permissionId
+			permissionId,
+			available,
+			level
 		) VALUES (
-			#{id},
 			#{roleId},
-			#{permissionId}
+			#{permissionId},
+			#{available},
+			#{level}
 		)
 	</insert>
 	

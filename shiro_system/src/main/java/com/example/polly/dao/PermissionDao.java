@@ -20,5 +20,7 @@ public interface PermissionDao {
     public void deletePermission(Long permissionId);
     
     public Permission getByParentId(Long parentId);
+    
+    
 
 }

@@ -25,7 +25,9 @@
 			<include refid="columns"/>
 		FROM sys_permission
 		<where>
-			<if test="permission != null and permission !='' ">permission like '%' || #{permission} || '%'</if>
+			<if test="permission != null and permission !='' ">and permission like '%' || #{permission} || '%'</if>
+			<if test="parentId != null"> and parent_id = #{parentId}</if>
+			<if test="available != null and available !='' ">and available = #{available}</if>
 		</where>
 	</select>
 		

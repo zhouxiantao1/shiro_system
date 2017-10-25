@@ -14,10 +14,9 @@
 
     <script src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 
-    
-
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/stylesheets/theme.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/stylesheets/premium.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/permissions.css">
     
     
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/static/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
@@ -176,8 +175,11 @@
       <div class="tab-pane active in" id="home">
 	      <form id="tab">
 		        <div class="form-group">
-			        <label>权限描述</label>
-			        <input type="text" placeholder="例如：用户管理" id="description" class="form-control">
+			        <span class="font_color">${role}</span>-<label>权限配置</label>  
+		        </div>
+		        <div class="form-group" hidden="hidden">
+			        <label>角色id</label>
+			        <input type="text"  id="roleId" value="${roleId}" class="form-control">
 		        </div>
 		       
 		        <div class="zTreeDemoBackground left">
@@ -188,7 +190,7 @@
 	</div>
 
     <div class="btn-toolbar list-toolbar">
-      <button id="save_permissions" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
+      <button id="save_role_permission" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
       <a href="#myModal" data-toggle="modal" class="btn btn-danger">取消</a>
     </div>
   </div>
@@ -231,27 +233,7 @@
         $(function() {
             $('.demo-cancel-click').click(function(){return false;});
         });
-        
-        
-        $("#save_permissions").click(function(){
-        	$.ajax({
-        		type: 'POST',
-        		async: true,
-        		data: { 
-	        			description: $("#description").val(), 
-	        			permission: $("#permission").val(), 
-	        			available:$("#available").val(),
-	        			status:$("#status").val(),
-	        			parentId:$("#parentId").val(),
-        			},
-        		url:"${pageContext.request.contextPath}/permission/add",
-        		success:function(result){
-        			alert("保存成功");
-        			window.location.href="${pageContext.request.contextPath}/permission/list";
-    			}
-        	});
-        });
-        
+             
         var setting = {
     			check: {
     				enable: true
@@ -265,49 +247,42 @@
         	
             var zNodes = ${trees};
 
-    		var zNodes1 =[
-    			{ id:1, pId:0, name:"can check 1", open:true},
-    			{ id:11, pId:1, name:"can check 1-1", open:true},
-    			{ id:111, pId:11, name:"can check 1-1-1"},
-    			{ id:112, pId:11, name:"can check 1-1-2"},
-    			{ id:12, pId:1, name:"can check 1-2", open:true},
-    			{ id:121, pId:12, name:"can check 1-2-1"},
-    			{ id:122, pId:12, name:"can check 1-2-2"},
-    			{ id:2, pId:0, name:"can check 2", checked:true, open:true},
-    			{ id:21, pId:2, name:"can check 2-1"},
-    			{ id:22, pId:2, name:"can check 2-2", open:true},
-    			{ id:221, pId:22, name:"can check 2-2-1", checked:true},
-    			{ id:23, pId:2, name:"can check 2-3"},
-    			{ id:222, pId:22, name:"can check 2-2-2"}
-    			
-    		];
-
-    		var code;
-
-    		function setCheck() {
-    			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-    			py = $("#py").attr("checked")? "p":"",
-    			sy = $("#sy").attr("checked")? "s":"",
-    			pn = $("#pn").attr("checked")? "p":"",
-    			sn = $("#sn").attr("checked")? "s":"",
-    			type = { "Y":py + sy, "N":pn + sn};
-    			zTree.setting.check.chkboxType = type;
-    			showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
-    		}
-    		function showCode(str) {
-    			if (!code) code = $("#code");
-    			code.empty();
-    			code.append("<li>"+str+"</li>");
-    		}
-
     		$(document).ready(function(){
-    			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
-    			setCheck();
-    			$("#py").bind("change", setCheck);
-    			$("#sy").bind("change", setCheck);
-    			$("#pn").bind("change", setCheck);
-    			$("#sn").bind("change", setCheck);
+    			var treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    			treeObj.expandAll(true);
     		});
+    		
+    		$("#save_role_permission").click(function(){
+    			var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+    			var nodes=treeObj.getCheckedNodes(true);
+    			
+    			 var permissionIds='';
+    			 for (var i = 0; i < nodes.length; i++) {  
+                     var halfCheck = nodes[i].getCheckStatus();  
+                     if (!halfCheck.half){  
+                    	  permissionIds += nodes[i].id +',';  
+                     }   
+                 }
+    			 if(permissionIds!=''){
+    				 permissionIds.substring(0,permissionIds.length-1);
+    			 }
+    				 
+    			 $.ajax({
+    	        		type: 'POST',
+    	        		async: true,
+    	        		data: { 
+    	        			    permissionIds: permissionIds, 
+    	        			    roleId: $("#roleId").val()
+    	        			},
+    	        		url:"${pageContext.request.contextPath}/role/addRolePermission",
+    	        		success:function(result){
+    	        			alert("保存成功");
+    	        			window.location.href="${pageContext.request.contextPath}/role/list";
+    	    			}
+    	        });
+    			alert(result);
+    		})
+    		
     		
     </script>
     

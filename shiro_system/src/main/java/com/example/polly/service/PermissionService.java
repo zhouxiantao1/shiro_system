@@ -22,4 +22,6 @@ public interface PermissionService {
      * 根据父类查询
      * */
     public Permission getByParentId(Long parentId);
+    
+    
 }

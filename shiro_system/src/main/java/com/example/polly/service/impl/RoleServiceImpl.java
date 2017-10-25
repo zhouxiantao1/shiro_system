@@ -32,8 +32,8 @@ public class RoleServiceImpl implements RoleService {
      * @param roleId
      * @param permissionIds
      */
-    public void correlationPermissions(Long roleId, Long permissionIds) {
-        roleDao.correlationPermissions(roleId, permissionIds);
+    public void correlationPermissions(Long roleId, Long permissionId,String available,int level) {
+        roleDao.correlationPermissions(roleId, permissionId,available,level);
     }
 
     /**
@@ -41,8 +41,8 @@ public class RoleServiceImpl implements RoleService {
      * @param roleId
      * @param permissionIds
      */
-    public void uncorrelationPermissions(Long roleId, Long permissionIds) {
-        roleDao.uncorrelationPermissions(roleId, permissionIds);
+    public void uncorrelationPermissions(Long roleId, Long permissionId) {
+        roleDao.uncorrelationPermissions(roleId, permissionId);
     }
     
     /**
@@ -52,6 +52,20 @@ public class RoleServiceImpl implements RoleService {
      */
     public List<Role> findList(Role role){
     	return roleDao.findList(role);
+    }
+    
+    /**
+     * 根据roleid获取权限id集合
+     * */
+    public List<Long> findPermissionListByRoleId(Long roleId){
+    	return roleDao.findPermissionListByRoleId(roleId);
+    }
+    
+    /**
+     * 根据roleId更新角色-权限表
+     * */
+    public void updateRolePermissionByRoleId(Long roleId){
+    	roleDao.updateRolePermissionByRoleId(roleId);
     }
 
 }
