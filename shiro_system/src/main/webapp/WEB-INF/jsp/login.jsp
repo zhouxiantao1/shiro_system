@@ -9,29 +9,13 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/stylesheets/premium.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/stylesheets/theme.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/supersized.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/login.css">
     
     <script src="${pageContext.request.contextPath}/static/lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 
 </head>
 <body class=" theme-blue">
 
-    <!-- Demo page code -->
-
-    <!--<script type="text/javascript">
-        $(function() {
-            var match = document.cookie.match(new RegExp('color=([^;]+)'));
-            if(match) var color = match[1];
-            if(color) {
-                $('body').removeClass(function (index, css) {
-                    return (css.match (/\btheme-\S+/g) || []).join(' ')
-                })
-                $('body').addClass('theme-' + color);
-            }
-
-            $('[data-popover="true"]').popover({html: true});
-            
-        });
-    </script>-->
     <style type="text/css">
         #line-chart {
             height:300px;
@@ -44,28 +28,6 @@
         }
     </style>
 
-     <!--<script type="text/javascript">
-        $(function() {
-            var uls = $('.sidebar-nav > ul > *').clone();
-            uls.addClass('visible-xs');
-            $('#main-menu').append(uls.clone());
-        });
-    </script>-->
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le fav and touch icons -->
-
-  <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
-  <!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
-  <!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
-  <!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
-  <!--[if (gt IE 9)|!(IE)]><!--> 
-   
-  <!--<![endif]-->
 
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
@@ -94,6 +56,7 @@
                 </div>      
                 <label class="remember-me"><input name="rememberMe" type="checkbox"> 记住账号</label>
                 <input type="submit" class="btn btn-primary pull-right" value="登录">
+                <div class="img_weibo" id="weiboLogin"><img src="${pageContext.request.contextPath}/static/images/weibo.png"/></div>
                 <div class="clearfix"></div>
             </form>
         </div>
@@ -107,12 +70,10 @@
     <script src="${pageContext.request.contextPath}/static/lib/bootstrap/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/supersized.3.2.7.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/supersized-init.js"></script>
-    <!-- <script type="text/javascript">
-        $("[rel=tooltip]").tooltip();
-        $(function() {
-            $('.demo-cancel-click').click(function(){return false;});
-        });
-    </script> -->
-    
+    <script type="text/javascript">
+    	$("#weiboLogin").click(function(){
+    		window.location.replace("https://api.weibo.com/oauth2/authorize?client_id=3472698345&response_type=code&redirect_uri=http://172.16.19.118:8090/shiro_system/weibogetlogin");
+    	})
+    </script>
   
 </body></html>

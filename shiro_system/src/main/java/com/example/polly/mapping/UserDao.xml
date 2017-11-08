@@ -16,6 +16,14 @@
 		available
 	</sql>
 	
+	<sql id="columnsThirdparty">
+		id, 
+		thirdparty_id as thirdpartyId, 
+		user_name as userName,
+		thirdparty_type as thirdpartyType,
+		available
+	</sql>
+	
 	<!-- 根据id查询 -->
 	<select id="findOne" resultType="com.example.polly.enty.User">
 		SELECT
@@ -101,6 +109,35 @@
 			#{available}
 		)
 	</insert>
+	
+	<!-- 添加第三方 -->
+	<insert id="createThirdparty">
+		INSERT INTO sys_user_thirdparty(
+			id, 
+			thirdparty_id, 
+			user_name,
+			thirdparty_type,
+			available
+		) VALUES (
+			#{id},
+			#{thirdpartyId},
+			#{userName},
+			#{thirdpartyType},
+			#{available}
+		)
+	</insert>
+	
+	<!-- 查询第三方 -->
+	<select id="selectThirdparty" resultType="com.example.polly.enty.Thirdparty">
+		SELECT
+			<include refid="columnsThirdparty"/>
+		FROM sys_user_thirdparty
+		<where>
+			<if test="thirdpartyId != null and thirdpartyId !='' ">and thirdparty_id = #{thirdpartyId}</if>
+			<if test="userName != null and userName !='' "> and user_name = #{userName}</if>
+			<if test="thirdpartyType != null and thirdpartyType !='' ">and thirdparty_type = #{thirdpartyType}</if>
+		</where>
+	</select>
 	
 	<update id="updateUser">
         update sys_user

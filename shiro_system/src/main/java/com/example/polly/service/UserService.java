@@ -5,6 +5,7 @@ package com.example.polly.service;
 import java.util.List;
 import java.util.Set;
 
+import com.example.polly.enty.Thirdparty;
 import com.example.polly.enty.User;
 
 /**
@@ -67,5 +68,14 @@ public interface UserService {
      * @return
      */
     public Set<String> findPermissions(String username);
-
+    
+    /**
+     * 添加第三方
+     * */
+    public void createThirdparty(Thirdparty thirdparty);
+    
+    /**
+     * 查询第三方
+     * */
+    public List<Thirdparty> selectThirdparty(Thirdparty thirdparty);
 }

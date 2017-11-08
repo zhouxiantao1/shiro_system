@@ -1,6 +1,7 @@
 package com.example.polly.service.impl;
 
 import com.example.polly.dao.UserDao;
+import com.example.polly.enty.Thirdparty;
 import com.example.polly.enty.User;
 import com.example.polly.enty.UserRole;
 import com.example.polly.service.UserService;
@@ -106,5 +107,18 @@ public class UserServiceImpl implements UserService {
     public Set<String> findPermissions(String username) {
         return userDao.findPermissions(username);
     }
-
+    
+    /**
+     * 添加第三方
+     * */
+    public void createThirdparty(Thirdparty thirdparty){
+    	userDao.createThirdparty(thirdparty);
+    }
+    
+    /**
+     * 查询第三方
+     * */
+    public List<Thirdparty> selectThirdparty(Thirdparty thirdparty){
+    	return userDao.selectThirdparty(thirdparty);
+    }
 }

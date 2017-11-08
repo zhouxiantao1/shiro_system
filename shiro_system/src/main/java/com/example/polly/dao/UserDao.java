@@ -4,6 +4,7 @@ package com.example.polly.dao;
 import java.util.List;
 import java.util.Set;
 
+import com.example.polly.enty.Thirdparty;
 import com.example.polly.enty.User;
 import com.example.polly.util.MyBatisDao;
 
@@ -30,4 +31,8 @@ public interface UserDao {
     Set<String> findRoles(String username);
 
     Set<String> findPermissions(String username);
+    
+    public void createThirdparty(Thirdparty thirdparty);
+    
+    public List<Thirdparty> selectThirdparty(Thirdparty thirdparty);
 }
