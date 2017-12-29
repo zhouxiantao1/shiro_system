@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.polly.dao.VerbDao">
+    
+	<sql id="columns">
+		id,
+		verb_name as verbName,
+		description
+	</sql>
+	
+	<!-- 根据parentId查询-->
+	<select id="getById" resultType="com.example.polly.enty.Verb">
+		SELECT
+			<include refid="columns"/>
+		FROM word_verb where id =#{id}
+	</select>
+	
+	
+	<!-- 查询权限列表-->
+	<select id="findList" resultType="com.example.polly.enty.Verb">
+		SELECT
+			<include refid="columns"/>
+		FROM word_verb
+		<where>
+			<if test="verbName != null and verbName !='' ">and verb_name like '%' || #{verbName} || '%'</if>
+		</where>
+	</select>
+		
+	<insert id="createVerb">
+		INSERT INTO word_verb(
+			id,
+			verb_name,
+			description
+		) VALUES (
+			#{id},
+			#{verbName},
+			#{description}
+		)
+	</insert>
+   
+   <delete id="deleteVerb">
+     delete from word_verb
+     <where>
+          id = #{id}
+       </where>
+   </delete>
+	
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.polly.dao.WordsDao">
+    
+	<sql id="columns">
+		id,
+		name,
+		type,
+		type_name as typeName,
+		appear_num as appearNum,
+		appear_freq as appearFreq
+	</sql>
+	
+	<!-- 根据parentId查询-->
+	<select id="getById" resultType="com.example.polly.enty.Words">
+		SELECT
+			<include refid="columns"/>
+		FROM word_words where id =#{id}
+	</select>
+	
+	
+	<!-- 查询权限列表-->
+	<select id="findList" resultType="com.example.polly.enty.Words">
+		SELECT
+			<include refid="columns"/>
+		FROM word_words
+		<where>
+			<if test="name != null and name !='' ">and name like '%' || #{name} || '%'</if>
+		</where>
+	</select>
+		
+	<insert id="createWords">
+		INSERT INTO word_words(
+			id,
+			name,
+			type,
+			type_name,
+			appear_num,
+			appear_freq
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{typeName},
+			#{appearNum},
+			#{appearFreq}
+		)
+	</insert>
+   
+   <delete id="deleteWords">
+     delete from word_words
+     <where>
+          id = #{id}
+       </where>
+   </delete>
+	
+</mapper>

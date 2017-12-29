@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.polly.enty.User;
 import com.example.polly.service.UserService;
-import com.example.polly.util.MD5;
 
 @Controller
 @RequestMapping("/user")
@@ -21,14 +20,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@RequiresPermissions("sys:user:add")
 	@RequestMapping("/add")
 	public void getSystemr(HttpServletRequest request,HttpServletResponse response,User user, Model model){
 		this.userService.createUser(user);
 	}
 	
+	@RequiresPermissions("sys:user:get")
 	@RequestMapping("/get")
 	public String getUser(HttpServletRequest request,HttpServletResponse response,Model model){
-		return "addUser";
+		return "sys/user";
 	}
 	
 	@RequestMapping("/update")

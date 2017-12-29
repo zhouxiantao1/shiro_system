@@ -1,9 +1,7 @@
 package com.example.polly.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.polly.enty.Permission;
 import com.example.polly.enty.Role;
 import com.example.polly.enty.Tree;
-import com.example.polly.enty.User;
 import com.example.polly.service.PermissionService;
 import com.example.polly.service.RoleService;
 

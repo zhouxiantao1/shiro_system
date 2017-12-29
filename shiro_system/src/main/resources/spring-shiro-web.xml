@@ -32,7 +32,7 @@
     </bean>
     
      <!-- Realm实现 -->
-    <bean id="thirdpartyRealm" class="com.example.polly.sys.shiro.UserRealm"> 
+    <bean id="thirdpartyRealm" class="com.example.polly.sys.shiro.ThirdRealm"> 
         <property name="cachingEnabled" value="true"/>
         <property name="authenticationCachingEnabled" value="true"/>
         <property name="authenticationCacheName" value="authenticationCache"/>
@@ -74,14 +74,14 @@
 
     <!-- 会话验证调度器 -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-        <property name="sessionValidationInterval" value="1800000"/>
+        <property name="sessionValidationInterval" value="1800000"/><!-- 会话验证间隔以毫秒为单位 -->
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="globalSessionTimeout" value="1800000"/>
-        <property name="deleteInvalidSessions" value="true"/>
+        <property name="deleteInvalidSessions" value="true"/><!-- true删除过期会话 -->
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
         <property name="sessionDAO" ref="sessionDAO"/>
@@ -150,6 +150,7 @@
             	/authorize=anon
             	/weibogetlogin=anon
                 /login = authc
+                /testLogin = anon
                 /logout = logout
                 /authenticated = authc
                 /** =kickout,user,sysUser<!-- 表示访问该地址的用户是身份验证通过或RememberMe登录的都可以 -->

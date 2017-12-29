@@ -1,6 +1,5 @@
 package com.example.polly.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.http.NameValuePair;
-import org.apache.oltu.oauth2.as.response.OAuthASResponse;
-import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -21,9 +16,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -69,6 +61,7 @@ public class LoginController {
         model.addAttribute("error", error);
         return "login";
     }
+	
 	@RequestMapping(value ="/")
     public String indexFrom(HttpServletRequest request, Model model) {
         return "index";
@@ -107,7 +100,7 @@ public class LoginController {
 		String error_code = request.getParameter("error_code");
 		if(!StringUtils.isEmpty(error_code)){
 			return null;
-        }else{
+        }else{        	
         	//ªÒ»°code
             String code = request.getParameter("code");
             String access_token = "";
@@ -201,7 +194,6 @@ public class LoginController {
      * @return
      */
     private JSONObject getUserInfo(String access_token,String uid){
-    	
         StringBuilder sb = new StringBuilder();
         sb.append("access_token=" + access_token);
         sb.append("&uid=" + uid);
@@ -210,4 +202,6 @@ public class LoginController {
         JSONObject json =JSONObject.fromObject(result);
         return json;
     }
+    
+    
 }
