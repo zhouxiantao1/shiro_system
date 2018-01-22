@@ -11,7 +11,7 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">	 
     
     <!-- 自动扫描 -->  
-    <context:component-scan base-package="com.example.polly" />
+    <context:component-scan base-package="com.example.polly,com.example.story" />
 	<!-- 引入配置文件 -->  
     <bean id="propertyConfigurer"  
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
@@ -20,10 +20,10 @@
     <!-- 数据库连接池 -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  
         destroy-method="close">  
-        <property name="driverClassName" value="${driver}" />  
-        <property name="url" value="${url}" />  
-        <property name="username" value="${username}" />  
-        <property name="password" value="${password}" />  
+        <property name="driverClassName" value="${jdbc.driverClassName}" />  
+        <property name="url" value="${jdbc.url}" />  
+        <property name="username" value="${jdbc.username}" />  
+        <property name="password" value="${jdbc.password}" />  
         
         <!-- 初始化连接大小 -->  
         <property name="initialSize" value="${initialSize}"></property>  
@@ -41,12 +41,12 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
         <property name="dataSource" ref="dataSource" />  
         <!-- 自动扫描mapping.xml文件 -->  
-        <property name="mapperLocations" value="classpath:com/example/polly/mapping/*.xml"></property>  
+        <property name="mapperLocations" value="classpath:com/example/*/mapper/*.xml"></property>  
     </bean>  
   
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.example.polly.dao" />
+        <property name="basePackage" value="com.example.polly.dao,com.example.story.dao" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
   	
@@ -55,7 +55,5 @@
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
         <property name="dataSource" ref="dataSource" />  
     </bean>
-	
-	
 
 </beans>

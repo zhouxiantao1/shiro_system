@@ -25,8 +25,6 @@ import com.example.polly.enty.Thirdparty;
 import com.example.polly.enty.User;
 import com.example.polly.service.UserService;
 import com.example.polly.service.impl.PasswordHelper;
-import com.example.polly.sys.shiro.CustomizedToken;
-import com.example.polly.sys.shiro.LoginType;
 import com.example.polly.util.HttpUtil;
 
 import net.sf.json.JSONObject;
@@ -52,11 +50,11 @@ public class LoginController {
         String exceptionClassName = (String)request.getAttribute("shiroLoginFailure");
         String error = null;
         if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
-            error = "ÓÃ»§Ãû/ÃÜÂë´íÎó";
+            error = "ï¿½Ã»ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
         } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
-            error = "ÓÃ»§Ãû/ÃÜÂë´íÎó";
+            error = "ï¿½Ã»ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
         } else if(exceptionClassName != null) {
-            error = "ÆäËû´íÎó£º" + exceptionClassName;
+            error = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + exceptionClassName;
         }
         model.addAttribute("error", error);
         return "login";
@@ -69,18 +67,18 @@ public class LoginController {
 	
 	@RequestMapping(value ="/testLogin")
     public String testLogin(HttpServletRequest request, Model model) {
-		//µÇÂ¼
+		//ï¿½ï¿½Â¼
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
     	Subject subject = SecurityUtils.getSubject();
     	UsernamePasswordToken loginToken = new UsernamePasswordToken(username, password);
     	try {
-    		//µÇÂ¼£¬¼´Éí·ÝÑéÖ¤
+    		//ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
 
     		subject.login(loginToken);
     		return "index";
     	} catch (AuthenticationException e) {
-    		//Éí·ÝÑéÖ¤Ê§°Ü
+    		//ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½
     		return null;
     	}
     }
@@ -91,7 +89,7 @@ public class LoginController {
         return "/weiboLogin";
     }
 	/**
-	 * µÚÈý·½Î¢²©µÇÂ¼
+	 * ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½Â¼
 	 * @throws OAuthSystemException 
 	 * */
 	@RequestMapping(value ="/weibogetlogin")
@@ -101,38 +99,39 @@ public class LoginController {
 		if(!StringUtils.isEmpty(error_code)){
 			return null;
         }else{        	
-        	//»ñÈ¡code
+        	//ï¿½ï¿½È¡code
             String code = request.getParameter("code");
             String access_token = "";
             String uid = "";
-            //»ñÈ¡token
+            //ï¿½ï¿½È¡token
             JSONObject token = getAccessToken(code);
             access_token = token.getString("access_token");
-            uid = token.getString("uid");//Î¢²©id
-            //»ñÈ¡ÓÃ»§ÐÅÏ¢
+            uid = token.getString("uid");//Î¢ï¿½ï¿½id
+            //ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
             JSONObject userInfo = getUserInfo(access_token, uid);
-            String name = userInfo.getString("screen_name");//Î¢²©êÇ³Æ
-            String profile_image_url = userInfo.getString("profile_image_url");//Í·ÏñµÄurl
-            String gender = "m".equals(userInfo.getString("gender"))?"1":"0";//ÐÔ±ð1-ÄÐ£¬0-Å®
-            //ÅÐ¶ÏÓÃ»§ÊÇ·ñ´æÔÚ
+            String name = userInfo.getString("screen_name");//Î¢ï¿½ï¿½ï¿½Ç³ï¿½
+            String profile_image_url = userInfo.getString("profile_image_url");//Í·ï¿½ï¿½ï¿½url
+            String gender = "m".equals(userInfo.getString("gender"))?"1":"0";//ï¿½Ô±ï¿½1-ï¿½Ð£ï¿½0-Å®
+            //ï¿½Ð¶ï¿½ï¿½Ã»ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
             Thirdparty thirdparty = new Thirdparty();
             thirdparty.setThirdpartyId(uid);
             List<Thirdparty> thirdpartys = userService.selectThirdparty(thirdparty);
             if(thirdpartys.size()>0){
             	Thirdparty thirdparty1 = thirdpartys.get(0);
             	User user = userService.findByUsername("admin");
-            	//µÇÂ¼
+            	//ï¿½ï¿½Â¼
             	Subject subject = SecurityUtils.getSubject();
-            	CustomizedToken loginToken = new CustomizedToken(user.getUsername(), user.getPassword(),LoginType.THRID_TYPE);
+            	UsernamePasswordToken loginToken = new UsernamePasswordToken(user.getUsername(),user.getPassword());
+//            	CustomizedToken loginToken = new CustomizedToken(user.getUsername(), user.getPassword(),LoginType.THRID_TYPE);
             	try {
             		loginToken.setRememberMe(true);
-            		//µÇÂ¼£¬¼´Éí·ÝÑéÖ¤
+            		//ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
             		subject.login(loginToken);
             	} catch (AuthenticationException e) {
-            		//Éí·ÝÑéÖ¤Ê§°Ü
+            		//ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½
             	}
             }else{
-            	//ÐÂÔöÓÃ»§
+            	//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
             	User user = new User();
             	user.setUsername(name);
             	user.setPassword("123456");
@@ -144,15 +143,15 @@ public class LoginController {
                 thirdparty.setAvailable("0");
             	userService.createThirdparty(thirdparty);
             	userService.createUser(user);
-            	//µÇÂ¼
+            	//ï¿½ï¿½Â¼
             	Subject subject = SecurityUtils.getSubject();
             	UsernamePasswordToken loginToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
             	try {
             		loginToken.setRememberMe(true);
-            		//µÇÂ¼£¬¼´Éí·ÝÑéÖ¤
+            		//ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
             		subject.login(loginToken);
             	} catch (AuthenticationException e) {
-            		//Éí·ÝÑéÖ¤Ê§°Ü
+            		//ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½
             	}
             }  
            
@@ -162,7 +161,7 @@ public class LoginController {
     }
 	
 	/**
-     * »ñÈ¡AccessToken
+     * ï¿½ï¿½È¡AccessToken
      */
     private JSONObject getAccessToken(String code) {
     	String url = "https://api.weibo.com/oauth2/access_token";  
@@ -175,7 +174,7 @@ public class LoginController {
         String result = HttpUtil.httpPost(url,map);
         System.out.println("===========result============"+result);
         /**
-         * ·µ»ØÊý¾Ý
+         * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          *  {
          *      "access_token": "ACCESS_TOKEN",
          *      "expires_in": 1234,
@@ -188,9 +187,9 @@ public class LoginController {
     }
     
     /**
-     * »ñÈ¡ÓÃ»§ÐÅÏ¢
+     * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
      * @param access_token
-     * @param uid ²éÑ¯µÄÓÃ»§ID
+     * @param uid ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½Ã»ï¿½ID
      * @return
      */
     private JSONObject getUserInfo(String access_token,String uid){
@@ -198,7 +197,7 @@ public class LoginController {
         sb.append("access_token=" + access_token);
         sb.append("&uid=" + uid);
         String result = HttpUtil.httpGet(GET_USER_INFO,sb.toString());
-        //·µ»Ø²ÎÊý£º²é¿´http://open.weibo.com/wiki/2/users/show
+        //ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½é¿´http://open.weibo.com/wiki/2/users/show
         JSONObject json =JSONObject.fromObject(result);
         return json;
     }

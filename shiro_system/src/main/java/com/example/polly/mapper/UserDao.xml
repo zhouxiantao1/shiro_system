@@ -56,7 +56,7 @@
 	<!-- 根据用户名查询权限 -->
 	<select id="findPermissions" resultType="java.lang.String">
 		select a.permission from sys_permission a 
-			INNER JOIN sys_role_permission b on a.id = b.permissionId and b.available='0' and level=2
+			INNER JOIN sys_role_permission b on a.id = b.permissionId and b.available='0' and a.available='0' and level=2
 			INNER JOIN sys_user_role c on b.roleId =c.roleId 
 			INNER JOIN  sys_user d on d.id =c.userId and d.username = #{username}
 	</select>
