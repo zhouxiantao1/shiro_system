@@ -48,7 +48,6 @@ public class StoryPersonController{
 		List<StoryPerson> storypersons = storyPersonService.pageList(0, 10, "");
 		mv.addObject("storypersons", storypersons);
 		mv.setViewName("story/storyPerson_list");
-		System.out.println("=============="+sockTest);
 		return mv;
 	}
 	

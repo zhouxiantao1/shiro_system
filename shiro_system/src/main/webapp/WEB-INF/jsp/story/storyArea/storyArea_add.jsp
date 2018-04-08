@@ -14,11 +14,11 @@
 	<div class="content">
 		<div class="header">
 
-			<h1 class="page-title">编辑人物</h1>
+			<h1 class="page-title">新增区域</h1>
 			<ul class="breadcrumb">
 				<li><a href="index.html">story管理</a></li>
-				<li><a href="users.html">人物列表</a></li>
-				<li class="active">编辑</li>
+				<li><a href="users.html">区域列表</a></li>
+				<li class="active">新增</li>
 			</ul>
 
 		</div>
@@ -31,21 +31,21 @@
 						<div class="tab-pane active in" id="home">
 							<form id="tab">
 								<div class="form-group">
-									<label>人物姓名</label> <input type="text" id="personName" value="${data.personName}" class="form-control" required="required">
+									<label>区域名称</label> <input type="text" id="areaName" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>人物年龄</label> <input type="text" id="personAge" value="${data.personAge}" class="form-control" required="required">
+									<label>区域描述</label> <input type="text" id="areaDescription" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>人物性别</label> <input type="text" id="personGender" value="${data.personGender}" class="form-control" required="required">
+									<label>是否可用</label> <select name="available" id="available"
+										class="form-control">
+										<option value="0">使用</option>
+										<option value="1">禁用</option>
+									</select>
 								</div>
-								<div class="form-group">
-									<label>肖像特征</label> <input type="text" id="facialKey" value="${data.facialKey}" class="form-control" required="required">
-								</div>
-
-								<div class="form-group">
-									<label>人物肖像</label>
-									<textarea  rows="6" id="personFacial" class="form-control" required="required">${data.personFacial}</textarea>
+								<div class="form-group" hidden="hidden">
+									<label>父类id</label> <input type="text" id="areaParentids"
+										value="${storyArea.areaParentids}" class="form-control">
 								</div>
 							</form>
 						</div>
@@ -55,7 +55,7 @@
 						<button class="btn btn-primary" id="save_storyPerson">
 							<i class="fa fa-save"></i> 保存
 						</button>
-						<a class="btn btn-danger cancel_storyPerson">取消</a>
+						<a class="btn btn-danger cancel_storyArea">取消</a>
 					</div>
 				</div>
 			</div>
@@ -75,6 +75,7 @@
 							</p>
 						</div>
 						<div class="modal-footer">
+							<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">继续添加</button>
 							<button  class="btn btn-primary cancel_storyPerson">返回列表</button>
 						</div>
 					</div>
@@ -87,8 +88,8 @@
 	</div>
 	
 	<script type="text/javascript">
-	 $(".cancel_storyPerson").click(function(){
-		 window.location.href="${pageContext.request.contextPath}/storyPerson/toList";
+	 $(".cancel_storyArea").click(function(){
+		 window.location.href="${pageContext.request.contextPath}/storyArea/toList";
 		 
 	 });
 	
@@ -99,21 +100,19 @@
         
         
         $("#save_storyPerson").click(function(){
-        	var id = ${data.id};
         	$.ajax({
         		type: 'POST',
         		async: true,
         		data: { 
-        			id:id,
-        			personName: $("#personName").val(), 
-        			personAge: $("#personAge").val(), 
-        			personGender:$("#personGender").val(),
-        			facialKey:$("#facialKey").val(),
-        			personFacial:$("#personFacial").val(),
+        				areaName: $("#areaName").val(), 
+        				areaDescription: $("#areaDescription").val(), 
+	        			available:$("#available").val(),
+	        			areaParent:$("#areaParentids").val(),
         			},
-        		url:"${pageContext.request.contextPath}/storyPerson/update",
-        		success:function(result){	
-        			$('#myModal').modal();
+        		url:"${pageContext.request.contextPath}/storyArea/add",
+        		success:function(result){
+        			alert("保存成功");
+        			window.location.href="${pageContext.request.contextPath}/storyArea/toList";
     			}
         	});
         });

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.story.dao.StoryAreaDao">
+	
+	<sql id="columns"> 
+		id as id,area_name as areaName,area_parentids as areaParentids,area_parent as areaParent,area_description as areaDescription,available as available
+	</sql>
+	
+	<resultMap id="storyAreaMap" type="com.example.story.entity.StoryAreaTree">
+  		<result column="id" property="id" jdbcType="BIGINT" />
+  		<result column="areaName" property="areaName" jdbcType="VARCHAR" />
+  		<result column="areaParentids" property="areaParentids" jdbcType="VARCHAR" />
+  		<result column="areaParent" property="areaParent" jdbcType="VARCHAR" />
+  		<result column="areaDescription" property="areaDescription" jdbcType="VARCHAR" />
+  		<result column="available" property="available" jdbcType="VARCHAR" />
+  		
+ 		<collection property="children" column="{areaParent=areaParentids}" javaType="ArrayList"
+			ofType="com.example.story.entity.StoryAreaTree" 
+			select="com.example.story.dao.StoryAreaDao.getByParentid"></collection>
+	</resultMap>
+	
+	<select id="findById" resultType="com.example.story.entity.StoryArea" parameterType="String">
+		select <include refid='columns'></include> from story_area where id=#{id}
+	</select>
+	
+	<select id="getByParentid" resultType="com.example.story.entity.StoryAreaTree">
+		select <include refid='columns'></include> from story_area where area_parent=#{areaParent}
+	</select>
+	
+	<select id="findTree" resultMap="storyAreaMap">
+		select <include refid='columns'></include> from story_area 
+		<where>
+          <if test="id != null and id !='' ">  and id = #{id}</if>
+          <if test="areaName != null and areaName !='' ">  and area_name = #{areaName}</if>
+          <if test="areaParentids != null and specname !='' ">  and area_parentids = #{areaParentids} </if>
+          <if test="areaParent != null and areaParent !=''" >  and area_parent = #{areaParent}</if>
+          <if test="areaDescription != null and areaDescription !='' ">  and area_description = #{areaDescription}</if>
+      </where>
+	</select>
+	
+	<select id="pageList" resultType="com.example.story.entity.StoryArea">
+		select <include refid='columns'></include> from story_area
+ 		<where><!-- where 可以自动处理and -->	
+ 			<if test='nameKey != null'> and area_name like '${areaName}'	<!-- name like '%${nameKey}%'--></if>	
+		</where>
+			<if test='pageIndex!=null and pageSize!=null'>limit  #{pageIndex},#{pageSize}</if>
+	</select>
+	
+	<select id="pageTotalCount" resultType="long">
+		select count(*) from story_area
+	</select>
+	
+	<select id="maxid" resultType="long">
+		select coalesce(max(id), 0)+1 from story_area
+	</select>
+	
+	<delete id="del" parameterType="String">
+		delete from story_area where id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.example.story.entity.StoryArea">
+		update story_area set id=#{id},area_name=#{areaName},area_parentids=#{areaParentids},area_parent=#{areaParent},area_description=#{areaDescription},available=#{available} where id=#{id}
+	</update>
+	
+	<insert id="insert" parameterType="com.example.story.entity.StoryArea" >
+		insert into story_area(id,area_name,area_parentids,area_parent,area_description,available)values (#{id},#{areaName},#{areaParentids},#{areaParent},#{areaDescription},#{available})
+	</insert>
+	
+</mapper>

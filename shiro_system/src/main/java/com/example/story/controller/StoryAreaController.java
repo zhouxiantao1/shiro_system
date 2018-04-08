@@ -1,4 +1,4 @@
-package ${pack};
+package com.example.story.controller;
 
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -19,46 +19,52 @@ import com.example.freemake.util.JsonUtils;
 import com.example.freemake.util.ReturnMsg;
 import com.example.freemake.util.TableData;
 import com.example.story.entity.StoryPerson;
-${importservice};
-${importEntity};
+import com.example.story.service.StoryAreaService;
+import com.example.story.entity.StoryArea;
+import com.example.story.entity.StoryAreaTree;
 
 /**
- * @author ${annotation.authorName}
- * @data ${annotation.date}
+ * @author zhouxiantao
+ * @data 2018-02-26 15:41:30
  *
- * @version ${annotation.version}
+ * @version 1.0
  */
 
 @Controller
-@RequestMapping("${className}")
-public class ${ClassName}Controller{
+@RequestMapping("storyArea")
+public class StoryAreaController{
 
 	@Autowired
-	private ${ClassName}Service ${className}Service;
+	private StoryAreaService storyAreaService;
 	
 	private ReturnMsg msg;
 	
-	@RequiresPermissions("${module}:${className}:tolist")
+	@RequiresPermissions("story:storyArea:tolist")
 	@RequestMapping(value = "/toList", method = RequestMethod.GET)
-	public ModelAndView toList (HttpServletRequest request,HttpServletResponse response)throws Exception{
-		List<StoryArea> storyAreas = storyAreaService.pageList(1, 10, null);
+	public ModelAndView toList (StoryArea storyArea,HttpServletRequest request,HttpServletResponse response)throws Exception{
+		List<StoryArea> storyAreas = storyAreaService.pageList(0, 10, null);
+		storyArea.setAreaParent("0");
+		List<StoryAreaTree> storyAreaTrees = storyAreaService.findTree(storyArea);
+		System.out.println(storyAreaTrees.toString());
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("${module}/${className}/${className}_list");
+		mv.setViewName("story/storyArea/storyArea_list");
 		mv.addObject("storyAreas", storyAreas);
+		mv.addObject("storyAreaTrees", storyAreaTrees);
 		return mv;
 	}
 	
-	@RequiresPermissions("${module}:${className}:list")
+	@RequiresPermissions("story:storyArea:list")
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
-	public String list(HttpServletRequest request,HttpServletResponse response) {
+	public String list(StoryArea storyArea,HttpServletRequest request,HttpServletResponse response) {
 		TableData pagingInfo = new TableData();
 		try {
 			int pageSize = Integer.parseInt(request.getParameter("pageSize"));
 			int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
 			String nameKey = request.getParameter("nameKey");
-			List<${ClassName}> data = ${className}Service.pageList(pageIndex,pageSize,nameKey);
-			long totalCount = ${className}Service.pageTotalCount();
+			List<StoryArea> data = storyAreaService.pageList(pageIndex,pageSize,nameKey);
+			
+			long totalCount = storyAreaService.pageTotalCount();
 			
 			pagingInfo.setTotalCount(totalCount);
 			pagingInfo.addRows(data);
@@ -69,20 +75,30 @@ public class ${ClassName}Controller{
 		return pagingInfo.toString();
 	}
 	
-	@RequiresPermissions("${module}:${className}:toAdd")
+	@RequiresPermissions("story:storyArea:toAdd")
 	@RequestMapping(value = "/toAdd", method = RequestMethod.GET)
-	public ModelAndView toAdd (HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toAdd (StoryArea storyArea,HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("${module}/${className}/${className}_add");
+		mv.addObject("storyArea", storyArea);
+		mv.setViewName("story/storyArea/storyArea_add");
 		return mv;
 	}
 	
-	@RequiresPermissions("${module}:${className}:add")
+	@RequiresPermissions("story:storyArea:add")
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST,produces = "application/json; charset=utf-8")
-	public String add(@RequestParam ${ClassName} ${className}, HttpServletRequest request,HttpServletResponse response){
+	public String add(StoryArea storyArea, HttpServletRequest request,HttpServletResponse response){
 		try{
-			int size = ${className}Service.insert(${className});
+			long id = storyAreaService.maxid();
+			storyArea.setId(id);
+			if(storyArea.getAreaParent()!=null && (!"".equals(storyArea.getAreaParent()))){
+				storyArea.setAreaParentids(storyArea.getAreaParent()+"-"+id);
+			}else{
+				storyArea.setAreaParent("0");
+				storyArea.setAreaParentids(""+id);
+			}
+			
+			int size = storyAreaService.insert(storyArea);
 			msg = new ReturnMsg(true, "操作成功!" );
 		} catch (Exception e) {
 			msg = new ReturnMsg(false, "操作失败!" );
@@ -92,13 +108,13 @@ public class ${ClassName}Controller{
 		}
 		
 	
-	@RequiresPermissions("${module}:${className}:toUpdate")	
+	@RequiresPermissions("story:storyArea:toUpdate")	
 	@RequestMapping(value = "/toUpdate", method = RequestMethod.GET)
-	public ModelAndView toModify (@RequestParam String ${Pk},HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toModify (@RequestParam String id,HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mv = new ModelAndView();
 		try{
-			${ClassName} data = ${className}Service.findById(${Pk});
-			mv.setViewName("${module}/${className}/${className}_edit");
+			StoryArea data = storyAreaService.findById(id);
+			mv.setViewName("story/storyArea/storyArea_edit");
 			mv.addObject("data",data);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -106,12 +122,12 @@ public class ${ClassName}Controller{
 		return mv;
 	}
 	
-	@RequiresPermissions("${module}:${className}:update")	
+	@RequiresPermissions("story:storyArea:update")	
 	@ResponseBody
 	@RequestMapping(value="/update",method=RequestMethod.POST,produces = "application/json; charset=utf-8")
-	public String modify(@RequestParam ${ClassName} ${className}, HttpServletRequest request,HttpServletResponse response){
+	public String modify(@RequestParam StoryArea storyArea, HttpServletRequest request,HttpServletResponse response){
 		try{
-			int size = ${className}Service.update(${className});
+			int size = storyAreaService.update(storyArea);
 			msg = new ReturnMsg(true, "操作成功!" );
 		} catch (Exception e) {
 			msg = new ReturnMsg(false, "操作失败!" );
@@ -120,13 +136,13 @@ public class ${ClassName}Controller{
 			return JsonUtils.objectToString(msg);
 		}
 	
-	@RequiresPermissions("${module}:${className}:toDetail")
+	@RequiresPermissions("story:storyArea:toDetail")
 	@RequestMapping(value = "/toDetail", method = RequestMethod.GET)
-	public ModelAndView toAdd (@RequestParam String ${Pk},HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toDetail (@RequestParam String id,HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mv = new ModelAndView();
 		try{
-			${ClassName} data = ${className}Service.findById(${Pk});
-			mv.setViewName("${module}/${className}/${className}_detail");
+			StoryArea data = storyAreaService.findById(id);
+			mv.setViewName("story/storyArea/storyArea_detail");
 			mv.addObject("data",data);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -134,12 +150,12 @@ public class ${ClassName}Controller{
 		return mv;
 	}
 	
-	@RequiresPermissions("${module}:${className}:del")
+	@RequiresPermissions("story:storyArea:del")
 	@ResponseBody
 	@RequestMapping(value="/del",method=RequestMethod.POST,produces = "application/json; charset=utf-8")
-	public String del(@RequestParam String ${Pk}, HttpServletRequest request,HttpServletResponse response){
+	public String del(@RequestParam String id, HttpServletRequest request,HttpServletResponse response){
 		try{
-			int size = ${className}Service.del(${Pk});
+			int size = storyAreaService.del(id);
 			msg = new ReturnMsg(true, "操作成功!" );
 		} catch (Exception e) {
 			msg = new ReturnMsg(false, "操作失败!" );

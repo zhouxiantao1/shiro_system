@@ -4,30 +4,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="${pack}.dao.${ClassName}Dao">
-	
-	<resultMap type="${className}" id="BaseResult">
-		<id  property="${Pk}" column="${pk}" />
-	<#list list as p>
-		<result property="${p.humpColumnName}" column="${p.column_name}"/>
-	</#list>
-	</resultMap>
-	
-	<parameterMap type="${className}" id="BaseParam">
-		<parameter property="${Pk}"/>
-	<#list list as p>
-		<parameter property="${p.humpColumnName}"/>
-	</#list>
-	</parameterMap>
-	
+
 	<sql id="columns"> 
 		${columns}
 	</sql>
 	
-	<select id="findById" resultType="BaseResult" parameterType="String">
+	<select id="findById" resultType="${pack}.entity.${ClassName}" parameterType="String">
 		${selectById}
 	</select>
 	
-	<select id="pageList" resultType="BaseResult">
+	<select id="pageList" resultType="${pack}.entity.${ClassName}">
 		${selectPage}
 	</select>
 	
@@ -39,11 +25,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		${delete}
 	</delete>
 	
-	<update id="update" parameterType="BaseParam">
+	<update id="update" parameterType="${pack}.entity.${ClassName}">
 		${update}
 	</update>
 	
-	<insert id="insert" parameterType="BaseParam" >
+	<insert id="insert" parameterType="${pack}.entity.${ClassName}" >
 		${insert}
 	</insert>
 	

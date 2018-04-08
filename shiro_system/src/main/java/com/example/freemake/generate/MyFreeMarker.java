@@ -30,8 +30,9 @@ public class MyFreeMarker {
 	private static Writer writer;
 	
 	public static final String ANNOTATION = "annotation";
-	public static final String ANNOTATION_AUTHOR_NAME = "Artoria";
-	public static final String ANNOTATION_AUTHOR_EMAIL = "wym98188623@163.com";
+	public static final String ANNOTATION_AUTHOR_NAME = "zhouxiantao";
+	public static final String ANNOTATION_AUTHOR_EMAIL = "zhouxiantao@163.com";
+	
 	public static final String ANNOTATION_VERSION = "1.0";
 	public static final String DATE_FROMATE = "yyyy-MM-dd HH:mm:ss";
 	
@@ -51,14 +52,22 @@ public class MyFreeMarker {
 	
 	
 	
-	
+	/**
+	 * @param tableName 表名
+	 * @param createUser 创建者
+	 * @param module 模块
+	 * @param modulename 模块名称
+	 * @param modulename 模块名称
+	 * @param catalog  目录名称
+	 * */
 	public static void CreateFile(String tableName,String createUser,String module,String modulename,
-			String prefix)throws Exception{
+			String prefix,String catalog)throws Exception{
 		map.put("tableName",tableName);
 		map.put("createUser",createUser) ;
 		map.put("module",module) ;
 		map.put("prefix",prefix) ;
 		map.put("modulename",modulename) ;
+		map.put("catalog",catalog) ;
 		
 		getPropertiesEles(map);
 		
@@ -91,7 +100,7 @@ public class MyFreeMarker {
 			CreateAddJSP(tableName,className, list, annotation, map, pk);
 			CreateEditJSP(tableName, className, list, annotation, map, pk);
 			CreateDetailJSP(tableName, className, list, annotation, map, pk);
-			MarkerDbConnection.createPermission(list,tableName, map);
+//			MarkerDbConnection.createPermission(list,tableName, map);
 			
 			if(MarkerDbConnection.selectBaseSeq(map)<1)
 				MarkerDbConnection.createBaseSeq();
@@ -109,7 +118,7 @@ public class MyFreeMarker {
 			template = configuration.getTemplate(CONTROLLER);
 			
 			Map<String, Object> root = new HashMap<String, Object>();
-			
+
 			String ClassName = StringUtils.upperCaseFirstOne(className);
 			
 			String importService = "import "+module+".service."+ClassName+"Service";
@@ -337,6 +346,7 @@ public class MyFreeMarker {
 			module = module+".mapper";
 			root.put("pk", pk);
 			root.put("Pk", StringUtils.getHumpName(pk));
+			root.put("tableNames", list);
 			CreateSql(tableName, list, root, pk);
 			
 			String ClassName = StringUtils.upperCaseFirstOne(className);
@@ -379,6 +389,7 @@ public static void CreateListJSP(String className,List<Map<String,String>> list,
 			template.setEncoding("UTF-8");
 			
 			Map<String ,Object> root = new HashMap<String,Object>();
+			root.put("catalog", map.get("catalog"));
 			root.put("pk", pk);
 			root.put("Pk", StringUtils.getHumpName(pk));
 			
@@ -418,6 +429,7 @@ public static void CreateListJSP(String className,List<Map<String,String>> list,
 			template.setEncoding("UTF-8");
 			
 			Map<String ,Object> root = new HashMap<String,Object>();
+			root.put("catalog", map.get("catalog"));
 			
 			String ClassName = StringUtils.upperCaseFirstOne(className);
 			String beanPath = map.get("workspace")+"/WebContent/WEB-INF/pages/"+className+"/";
@@ -462,6 +474,7 @@ public static void CreateListJSP(String className,List<Map<String,String>> list,
 			template.setEncoding("UTF-8");
 			
 			Map<String ,Object> root = new HashMap<String,Object>();
+			root.put("catalog", map.get("catalog"));
 			
 			String ClassName = StringUtils.upperCaseFirstOne(className);
 			String beanPath = map.get("workspace")+"/WebContent/WEB-INF/pages/"+className+"/";
@@ -508,6 +521,7 @@ public static void CreateDetailJSP(String tableName,String className,List<Map<St
 			template.setEncoding("UTF-8");
 			
 			Map<String ,Object> root = new HashMap<String,Object>();
+			root.put("catalog", map.get("catalog"));
 			
 			String ClassName = StringUtils.upperCaseFirstOne(className);
 			String beanPath = map.get("workspace")+"/WebContent/WEB-INF/pages/"+className+"/";
@@ -558,7 +572,8 @@ public static void CreateDetailJSP(String tableName,String className,List<Map<St
 		String count = "select count(*) from "+tableName;
 		
 		String columns ="";
-		
+		StringBuffer wheres = new StringBuffer();
+		wheres.append("\n\t\t<where>\n");
 		for(int i=0;i<list.size();i++){
 			if(i==(list.size()-1)){
 				insert += list.get(i).get("column_name")+")";
@@ -571,17 +586,20 @@ public static void CreateDetailJSP(String tableName,String className,List<Map<St
 			values += "#{"+list.get(i).get("humpColumnName")+"},";
 			update += list.get(i).get("column_name")+"=#{"+list.get(i).get("humpColumnName")+"},";
 			columns += list.get(i).get("column_name")+" as "+list.get(i).get("humpColumnName")+",";
+			
+			wheres.append("\t\t\t<if test=\"").append(list.get(i).get("humpColumnName")).append("!=null")
+				.append(" ||").append(list.get(i).get("humpColumnName")).append("!=''\">")
+				.append(list.get(i).get("column_name")).append("=").append("#{")
+				.append(list.get(i).get("humpColumnName")).append("}</if>\n");
 		}
-		
-		String PageSql = "\n \t\t<where><!-- where 可以自动处理and -->	\n \t\t\t<if test='nameKey != null'> "
-		+ "	<!-- name like '%${nameKey}%'-->\n\n\t\t\t</if>	\n\t\t</where>\n"
-		+ "	\t\t<if test='pageIndex!=null and pageSize!=null'>\n \t\t\tlimit  #{pageIndex},#{pageSize}\n\t\t\t</if>";
-		
+		wheres.append("\t\t\t<if test='pageIndex!=null and pageSize!=null'>limit  #{pageIndex},#{pageSize}</if>\n");
+		wheres.append("\t\t</where>\n");
+	
 		root.put("insert", insert+values);
 		root.put("update", update+where);
 		root.put("delete", delete+where);
 		root.put("selectById", select+where);
-		root.put("selectPage", select+PageSql);
+		root.put("selectPage", select+wheres);
 		root.put("columns", columns);
 		root.put("count", count);
 	}

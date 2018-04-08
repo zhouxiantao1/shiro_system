@@ -15,16 +15,14 @@
 				</ul>
 			</li>
 
-			<li data-popover="true" data-content="Items in this group require a <strong><a href='http://portnine.com/bootstrap-themes/aircraft' target='blank'>premium license</a><strong>."
-				rel="popover" data-placement="right"><a href="#"data-target=".premium-menu" class="nav-header collapsed"
-				data-toggle="collapse"><i class="fa fa-fw fa-fighter-jet"></i>
-					story管理<i class="fa fa-collapse"></i></a>
+			<li><a href="#" data-target=".premium-menu" class="nav-header collapsed" data-toggle="collapse">
+				<i class="fa fa-fw fa-dashboard"></i>story管理<i class="fa fa-collapse"></i></a>
 			</li>
 			<li>
 				<ul class="premium-menu nav nav-list collapse">
 					<li class="visible-xs visible-sm"><a href="#">- Premium features require a license -</a></span>
 					<li><a href="${pageContext.request.contextPath}/storyPerson/toList"><span class="fa fa-caret-right"></span> 人物管理</a></li>
-					<li><a href="premium-blog.html"><span class="fa fa-caret-right"></span> Blog</a></li>
+					<li><a href="${pageContext.request.contextPath}/storyArea/toList"><span class="fa fa-caret-right"></span> 区域管理</a></li>
 					<li><a href="premium-blog-item.html"><span class="fa fa-caret-right"></span> Blog Page</a></li>
 					<li><a href="premium-pricing-tables.html"><span class="fa fa-caret-right"></span> Pricing Tables</a></li>
 					<li><a href="premium-upgrade-account.html"><span class="fa fa-caret-right"></span> Upgrade Account</a></li>

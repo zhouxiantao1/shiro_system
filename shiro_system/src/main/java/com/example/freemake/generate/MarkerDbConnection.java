@@ -284,7 +284,7 @@ public class MarkerDbConnection {
 	 * 添加权限
 	 * */
 	public static int createPermission(List<Map<String,String>> list,String tableName,Map<String,Object> map){
-
+		
 		int size=-1;
 		String sql = "INSERT INTO sys_permission ("+
 			"permission,"+

@@ -14,10 +14,10 @@
 	<div class="content">
 		<div class="header">
 
-			<h1 class="page-title">编辑人物</h1>
+			<h1 class="page-title">编辑区域</h1>
 			<ul class="breadcrumb">
 				<li><a href="index.html">story管理</a></li>
-				<li><a href="users.html">人物列表</a></li>
+				<li><a href="users.html">区域列表</a></li>
 				<li class="active">编辑</li>
 			</ul>
 
@@ -88,7 +88,7 @@
 	
 	<script type="text/javascript">
 	 $(".cancel_storyPerson").click(function(){
-		 window.location.href="${pageContext.request.contextPath}/storyPerson/toList";
+		 window.location.href="${pageContext.request.contextPath}/storyArea/toList";
 		 
 	 });
 	
@@ -111,7 +111,7 @@
         			facialKey:$("#facialKey").val(),
         			personFacial:$("#personFacial").val(),
         			},
-        		url:"${pageContext.request.contextPath}/storyPerson/update",
+        		url:"${pageContext.request.contextPath}/storyArea/update",
         		success:function(result){	
         			$('#myModal').modal();
     			}

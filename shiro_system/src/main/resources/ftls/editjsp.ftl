@@ -1,135 +1,122 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<%@page language="java" contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:set var="bpt" value="${r'${pageContext.request.contextPath}'}"/>
-<!-- BEGIN HEAD -->
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-	+ request.getServerName() + ":" + request.getServerPort()
-	+ path + "/";
-%>
-<base href="<%=basePath%>">
+<!doctype html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<html lang="en">
 <head>
-   <meta charset="utf-8" />
-   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-   <meta content="" name="description" />
-   <meta content="Mosaddek" name="author" />
-   <link href="static/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-   <link href="static/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
-   <link href="static/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-   <link href="static/css/style.css" rel="stylesheet" />
-   <link href="static/css/style-responsive.css" rel="stylesheet" />
-   <link href="static/css/style-default.css" rel="stylesheet" id="style_color" />
-   <link href="static/assets/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
-   <link href="static/assets/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
-   
-   <style type="text/css">
-    	.pagebody{
-    		margin-left: 20px;
-		    margin-right: 20px;
-    	}
-    </style>
-   
+<%@include file="/WEB-INF/jsp/include/head.jsp"%>
+
 </head>
+<body class=" theme-blue">
 
-<body class="fixed-top">
-   
-   <jsp:include page="../../pages/common/header.jsp"></jsp:include>
-   
-   <!-- BEGIN CONTAINER -->
-   <div id="container" class="row-fluid">
-      
-      <jsp:include page="../../pages/common/left.jsp"></jsp:include>
-      
-      <!-- BEGIN PAGE -->  
-      <div id="main-content">
-         <!-- BEGIN PAGE CONTAINER-->
-         <div class="container-fluid">
-            <!-- BEGIN PAGE HEADER-->   
-            <div class="row-fluid">
-               <div class="span12">
-                  <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-                   <h3 class="page-title">  控制台</h3>
-                   <ul class="breadcrumb">
-                       <li>
-                           <a href="/">首页</a>
-                           <span class="divider">/</span>
-                       </li>                      
-                       <li class="active">  控制台</li>
-                   </ul>
-                   <!-- END PAGE TITLE & BREADCRUMB-->
-               </div>
-            </div>
-            <!-- END PAGE HEADER-->
-         </div>
-         <!-- END PAGE CONTAINER-->
-         <!-- 你添加的内容  -->
-          <div class="row-fluid pagebody">
-             <form id="formMenu">
-             
-	             <#list list as p>
-	             	<div class="form-group">
-		             	<label class="col-sm-2 control-label" >${p.column_comment}</label>
-						<div class="col-sm-4">
-							<input class="form-control col-sm-3" type="text" name="${p.humpColumnName}" id="${p.humpColumnName}" value="${r'${data.'}${p.humpColumnName}${r'}'}">
+	<%@include file="/WEB-INF/jsp/include/top.jsp"%>
+	<%@include file="/WEB-INF/jsp/include/left.jsp"%>
+
+	<div class="content">
+		<div class="header">
+
+			<h1 class="page-title">编辑${catalog}</h1>
+			<ul class="breadcrumb">
+				<li><a href="index.html">story管理</a></li>
+				<li><a href="users.html">${catalog}列表</a></li>
+				<li class="active">编辑</li>
+			</ul>
+
+		</div>
+		<div class="main-content">
+
+			<div class="row">
+				<div class="col-md-4">
+					<br>
+					<div id="myTabContent" class="tab-content">
+						<div class="tab-pane active in" id="home">
+							<form id="tab">
+								<div class="form-group">
+									<label>人物姓名</label> <input type="text" id="personName" value="${r'${data.personName}'}" class="form-control" required="required">
+								</div>
+								<div class="form-group">
+									<label>人物年龄</label> <input type="text" id="personAge" value="${r'${data.personAge}'}" class="form-control" required="required">
+								</div>
+								<div class="form-group">
+									<label>人物性别</label> <input type="text" id="personGender" value="${r'${data.personGender}'}" class="form-control" required="required">
+								</div>
+								<div class="form-group">
+									<label>肖像特征</label> <input type="text" id="facialKey" value="${r'${data.facialKey}'}" class="form-control" required="required">
+								</div>
+
+								<div class="form-group">
+									<label>人物肖像</label>
+									<textarea  rows="6" id="personFacial" class="form-control" required="required">${r'${data.personFacial}'}</textarea>
+								</div>
+							</form>
 						</div>
-					</div>	
-					
-	             </#list>
-	             <div class="form-group">
-						<input class="btn btn-primary" type="button" id="save" value="提交" >
-						<input class="btn btn-info" type="button" id="rtn" value="返回" >
-						<input  type="hidden" name="${Pk}" id="${Pk}" value="${r'${data.'}${Pk}${r'}'}">
+					</div>
+
+					<div class="btn-toolbar list-toolbar">
+						<button class="btn btn-primary" id="save_storyPerson">
+							<i class="fa fa-save"></i> 保存
+						</button>
+						<a class="btn btn-danger cancel_storyPerson">取消</a>
+					</div>
 				</div>
-			</form>
-			
-         </div>
-         <!-- 你添加的内容end  -->
-      </div>
-      <!-- END PAGE -->  
-   </div>
-   <!-- END CONTAINER -->
+			</div>
 
-   <!-- BEGIN FOOTER -->
-   <div id="footer">
-       test
-   </div>
-   <!-- END FOOTER -->
+			<div class="modal small fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+							<h3 id="myModalLabel">保存成功</h3>
+						</div>
+						<div class="modal-body">
 
-   <script src="static/js/jquery-1.8.3.min.js"></script>
-   <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
-   <script src="static/assets/bootstrap-table/bootstrap-table.min.js"></script>
-   <script src="static/js/common-scripts.js"></script>
-   <script src="static/assets/layer/layer.js"></script>
-   <script>
-   		$(function(){
-   			
-   			$("#rtn").click(function(){
-   				window.location="${className}/toList"
-   			})
-   		
-	   		$("#save").click(function(){
-				 var dataJson= $("#formMenu").serializeArray();
-				$.ajax({
-					url:"${className}/modify",
-					type:"post",
-					data:dataJson,
-					dataType: "json",
-					success:function(data){
-						if(data.msg="success"){
-							alert("修改成功");
-							window.location="${className}/toList"
-						}else{
-							alert("修改失败");
-						}
-						
-					}
-				
-				})
-			})
-   		})
-   </script>
+							<p >
+								<i><img src="${r'${pageContext.request.contextPath}'}/static/images/icon/succeed.png"></i></br></br>
+								保存成功
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button  class="btn btn-primary cancel_storyPerson">返回列表</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<%@include file="/WEB-INF/jsp/include/foot.jsp"%>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	 $(".cancel_storyPerson").click(function(){
+		 window.location.href="${r'${pageContext.request.contextPath}'}/${className}/toList";
+		 
+	 });
+	
+        $("[rel=tooltip]").tooltip();
+        $(function() {
+            $('.demo-cancel-click').click(function(){return false;});
+        });
+        
+        
+        $("#save_storyPerson").click(function(){
+        	var id = ${r'${data.id}'};
+        	$.ajax({
+        		type: 'POST',
+        		async: true,
+        		data: { 
+        			id:id,
+        			personName: $("#personName").val(), 
+        			personAge: $("#personAge").val(), 
+        			personGender:$("#personGender").val(),
+        			facialKey:$("#facialKey").val(),
+        			personFacial:$("#personFacial").val(),
+        			},
+        		url:"${r'${pageContext.request.contextPath}'}/${className}/update",
+        		success:function(result){	
+        			$('#myModal').modal();
+    			}
+        	});
+        });
+    </script>
 </body>
 </html>
